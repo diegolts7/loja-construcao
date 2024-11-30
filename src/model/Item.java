@@ -1,23 +1,19 @@
 package model;
 
 public class Item {
-
-    private int codigo;
+    private static int auxCodigo;
+    private final int codigo;
     private Produto produto;
     private double quantidade;
 
-    public Item(int codigo, Produto produto, double quantidade) {
-        this.codigo = codigo;
+    public Item(Produto produto, double quantidade) {
+        this.codigo = auxCodigo++;
         this.produto = produto;
         this.quantidade = quantidade;
     }
 
     public int getCodigo() {
         return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
     }
 
     public Produto getProduto() {

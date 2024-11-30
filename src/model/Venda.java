@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class Venda {
@@ -31,8 +32,39 @@ public class Venda {
         return true;
     }
 
+    public boolean removerItem(int codigoItem){
+        for (int i=0;i<this.quantidadeItens;i++){
+            if (this.itens[i].getCodigo() == codigoItem){
+                if(i < (this.itens.length -1)){
+                    this.itens[i] = itens[this.quantidadeItens -1];
+                    this.itens[this.quantidadeItens - 1] = null;
+                }else{
+                    this.itens[i] = null;
+                }
+                this.quantidadeItens--;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Item[] getItens(){
         return Arrays.copyOf(itens, quantidadeItens);
     }
 
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    public int getQuantidadeItens() {
+        return quantidadeItens;
+    }
+
+    public void setQuantidadeItens(int quantidadeItens) {
+        this.quantidadeItens = quantidadeItens;
+    }
 }
