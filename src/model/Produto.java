@@ -54,7 +54,7 @@ public class Produto {
     }
 
     public void setQtdEstoque(double qtdEstoque) {
-        this.qtdEstoque = qtdEstoque;
+        this.qtdEstoque += qtdEstoque;
     }
 
     public String retornarProduto(){

@@ -2,6 +2,6 @@ package model;
 
 public enum Categoria {
 
-    ALIMENTICIO, HIGIENE, LIMPEZA, HORTIFRUTI, PADARIA;
+    HIDRAULICO, ELETRICO, CONSTRUÇÃO, TINTA;
 
 }

@@ -6,6 +6,7 @@ import controller.VendaController;
 import model.*;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +14,8 @@ public class Main {
     private static Scanner myScanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        Locale.setDefault(Locale.US);
         boolean parada = false;
         HistoricoVendas historicoVendas = new HistoricoVendas();
 
@@ -24,7 +27,7 @@ public class Main {
 
 
         do {
-            System.out.println("\n\n#################################################################\nBEM VINDO AO MERCADINHO SANTA LUZIA, SUA COMPRA É NOSSA ALEGRIA!!! \uD83D\uDE0A\n#################################################################\n\n1. Fazer venda\n2. Cadastrar produto\n3. Historico de vendas\n4. Historico de produtos\n0. Sair\n");
+            System.out.println("\n\n#################################################################\nBEM VINDO A CONSTRUÇÕES LTDA - A MELHOR DA REGIÃO!!! \uD83D\uDE0A\n#################################################################\n\n1. Fazer venda\n2. Cadastrar produto\n3. Historico de vendas\n4. Historico de produtos\n5. Fazer pedido ao fornecedor.\n0. Sair\n");
             int escolha = myScanner.nextInt();
             switch (escolha){
                 case 1 : VendaController.registrarVenda(historicoVendas, historicoProdutos); break;
@@ -32,6 +35,7 @@ public class Main {
                     ProdutoController.registrarProduto(historicoProdutos); break;
                 case 3 : historicoVendas.imprimirHistoricoVendas(); break;
                 case 4 : ProdutoView.imprimirProdutos(historicoProdutos.getProdutos()); break;
+                case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
                 case 0 : parada = true; break;
                 default: continue;
             }

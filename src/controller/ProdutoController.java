@@ -3,6 +3,7 @@ package controller;
 import model.Categoria;
 import model.HistoricoProdutos;
 import model.Produto;
+import view.ProdutoView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,8 @@ public class ProdutoController {
 
         System.out.println("Informe a quantidade do produto em estoque: ");
         double qtdEstoque = myScanner.nextDouble();
+
+        myScanner.nextLine();
 
         Categoria categoria = solicitarCategoriaValida();
 
@@ -61,4 +64,33 @@ public class ProdutoController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyHHmmssSSS") ;
         return  LocalDateTime.now().format(formatter) + new Random().nextInt(100);
     }
+
+    public static void fazerPedido(HistoricoProdutos historicoProdutos){
+        ProdutoView.imprimirProdutos(historicoProdutos.getProdutos());
+        System.out.println("Qual o produto você deseja comprar? ");
+        String idItemCompra = myScanner.nextLine();
+        Produto produtoPedido = historicoProdutos.getProdutoByCodigo(idItemCompra);
+
+        while (produtoPedido == null){
+            System.out.println("Digite um id de produto valido: ");
+            idItemCompra = myScanner.nextLine();
+        }
+
+        System.out.println("Qual quantidade desse produto deseja? ");
+        double quantidade = myScanner.nextDouble();
+        myScanner.nextLine();
+
+        while (quantidade < 1){
+            System.out.println("Digite uma quantidade valida: ");
+            quantidade = myScanner.nextDouble();
+            myScanner.nextLine();
+        }
+
+        produtoPedido.setQtdEstoque(quantidade);
+        if (!historicoProdutos.salvarProdutos()){
+            produtoPedido.setQtdEstoque(-quantidade);
+        }
+    }
+
+
 }
