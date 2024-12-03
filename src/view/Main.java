@@ -3,6 +3,7 @@ package view;
 import controller.CSVUtils;
 import controller.ProdutoController;
 import controller.VendaController;
+import controller.VendaControllerGUI;
 import model.*;
 
 import java.time.LocalDate;
