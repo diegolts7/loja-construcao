@@ -2,7 +2,13 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import controller.ProdutoController;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import controller.ProdutoControllerGUI;
 import controller.VendaControllerGUI;
 import model.HistoricoProdutos;
 import model.HistoricoVendas;
@@ -11,8 +17,10 @@ public class Interface {
 
     public static void main(String[] args) {
         // Configurações principais da janela
-        JFrame frame = new JFrame("PV Miudezas - Construções LTDA");
-        frame.setSize(800, 600);
+        JFrame frame = new JFrame("PV Miudezas para Construção");
+
+        // Maximizar a janela ao iniciar (tela cheia)
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Layout principal para trocar entre os "painéis" (páginas)
@@ -25,13 +33,40 @@ public class Interface {
         historicoProdutos.lerProdutos();
 
         // Painel inicial (menu principal)
-        JPanel menuPanel = new JPanel(new BorderLayout());
+        JPanel menuPanel = new JPanel(new BorderLayout()) {
+            // Sobrescrever o método paintComponent para adicionar a imagem de fundo
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                try {
+                    // Carregar a imagem de fundo
+                    BufferedImage backgroundImage = ImageIO.read(new File("src/img/background.jpg")); // Coloque o caminho correto da sua imagem
+                    // Redimensionar para se ajustar ao tamanho do painel
+                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+                    // Definir a opacidade
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)); // 0.3f é a opacidade (ajuste conforme necessário)
+                    g2d.fillRect(0, 0, getWidth(), getHeight());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
-        // Título no topo
-        JLabel titleLabel = new JLabel("PV Miudezas - Construções LTDA", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(0, 102, 204));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        // Carregar a logo
+        ImageIcon logoIcon = new ImageIcon("src/img/logo.png"); // Caminho para a logo
+        Image img = logoIcon.getImage();
+        Image scaledImg = img.getScaledInstance(230, 130, Image.SCALE_SMOOTH);
+        logoIcon = new ImageIcon(scaledImg);
+
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        logoLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Painel para exibir a logo
+        JPanel logoPanel = new JPanel();
+        logoPanel.setBackground(new Color(255, 239, 213)); // Mesma cor de fundo para consistência
+        logoPanel.add(logoLabel);
 
         // Painel para botões centralizados
         JPanel buttonPanel = new JPanel(new GridBagLayout());
@@ -58,7 +93,7 @@ public class Interface {
             button.setBackground(buttonColor);
             button.setForeground(Color.WHITE);
             button.setFont(buttonFont);
-            button.setPreferredSize(new Dimension(250, 50));  // Tamanho fixo para todos os botões
+            button.setPreferredSize(new Dimension(350, 60));  // Aumentando o tamanho dos botões
             button.setFocusPainted(false);  // Remove o contorno quando o botão está focado
         }
 
@@ -77,8 +112,8 @@ public class Interface {
         gbc.gridy++;
         buttonPanel.add(sairButton, gbc);
 
-        // Adicionar título e painel central ao menu
-        menuPanel.add(titleLabel, BorderLayout.NORTH);
+        // Adicionar a logo e painel central ao menu
+        menuPanel.add(logoPanel, BorderLayout.NORTH);  // Logo substitui o título
         menuPanel.add(buttonPanel, BorderLayout.CENTER);
 
         // Painel de venda
@@ -106,10 +141,18 @@ public class Interface {
 
         // Ações dos botões para alternar entre as páginas
         vendaButton.addActionListener(e -> cardLayout.show(mainPanel, "Venda"));
-        cadastrarProdutoButton.addActionListener(e -> ProdutoController.registrarProduto(historicoProdutos));
+
+        // Ação para o botão "Cadastrar Produto"
+        cadastrarProdutoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ProdutoControllerGUI.registrarProduto(historicoProdutos);
+            }
+        });
+
         historicoVendasButton.addActionListener(e -> cardLayout.show(mainPanel, "HistoricoVendas"));
         historicoProdutosButton.addActionListener(e -> cardLayout.show(mainPanel, "HistoricoProdutos"));
-        pedidoButton.addActionListener(e -> ProdutoController.fazerPedido(historicoProdutos));
+        //pedidoButton.addActionListener(e -> ProdutoController.fazerPedido(historicoProdutos));
         sairButton.addActionListener(e -> System.exit(0));
 
         // Exibir a janela inicial

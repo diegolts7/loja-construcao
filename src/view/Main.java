@@ -1,12 +1,9 @@
 package view;
 
-import controller.CSVUtils;
-import controller.ProdutoController;
+import controller.ProdutoControllerGUI;
 import controller.VendaController;
-import controller.VendaControllerGUI;
 import model.*;
 
-import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -33,10 +30,10 @@ public class Main {
             switch (escolha){
                 case 1 : VendaController.registrarVenda(historicoVendas, historicoProdutos); break;
                 case 2 :
-                    ProdutoController.registrarProduto(historicoProdutos); break;
+                    ProdutoControllerGUI.registrarProduto(historicoProdutos); break;
                 case 3 : historicoVendas.imprimirHistoricoVendas(); break;
                 case 4 : ProdutoView.imprimirProdutos(historicoProdutos.getProdutos()); break;
-                case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
+                //case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
                 case 0 : parada = true; break;
                 default: continue;
             }
