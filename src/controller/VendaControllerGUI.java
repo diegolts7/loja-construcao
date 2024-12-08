@@ -3,13 +3,10 @@ package controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 import model.*;
-import controller.VendaController;
 import view.VendaView;
 
 public class VendaControllerGUI {
-    private JFrame frame;
     private JTable table;
     private DefaultTableModel tableModel;
     private HistoricoVendas historicoVendas;
@@ -20,96 +17,100 @@ public class VendaControllerGUI {
         this.historicoVendas = historicoVendas;
         this.historicoProdutos = historicoProdutos;
         this.venda = new Venda();
+    }
 
-        // Configurar a janela principal
-        frame = new JFrame("Registrar Venda - Construções LTDA");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setLayout(new BorderLayout());
+    public JPanel createVendaPanel(CardLayout cardLayout, JPanel mainPanel) {
+        JPanel vendaPanel = new JPanel(new BorderLayout());
+        vendaPanel.setBackground(new Color(245, 245, 245)); // Cor de fundo suave
 
         // Tabela para exibir os itens da venda
-        tableModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Quantidade", "Preço"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"Código", "Nome", "Quantidade", "Preço", "Subtotal"}, 0);
         table = new JTable(tableModel);
+        table.setRowHeight(40);  // Tamanho maior das linhas da tabela
+        table.setFont(new Font("Arial", Font.PLAIN, 16));  // Fonte maior para os dados
+        table.setSelectionBackground(new Color(200, 230, 255)); // Cor de fundo para seleção
         JScrollPane tableScroll = new JScrollPane(table);
 
         // Painel para os botões e formulários
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2, 10, 10));
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(new Color(192, 188, 182));  // Cor pastel de fundo
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Campos de entrada
-        JTextField nomeProdutoField = new JTextField();
-        JTextField codigoProdutoField = new JTextField();
+        // Campo de quantidade
         JTextField quantidadeField = new JTextField();
 
+        // JComboBox para selecionar produto
+        JComboBox<Produto> produtoComboBox = new JComboBox<>();
+        // Preencher o JComboBox com os produtos disponíveis
+        for (Produto p : historicoProdutos.getProdutos()) {
+            produtoComboBox.addItem(p);  // Adiciona o produto completo ao combo
+        }
+
         // Botões
-        JButton buscarProdutoButton = new JButton("Buscar Produto");
         JButton adicionarItemButton = new JButton("Adicionar Item");
-        JButton removerItemButton = new JButton("Remover Item");
         JButton finalizarVendaButton = new JButton("Finalizar Venda");
+        JButton voltarButton = new JButton("Voltar ao Menu");
+
+        // Estilizando os botões
+        Color buttonColor = new Color(0, 153, 204);  // Azul para os botões
+        Font buttonFont = new Font("Arial", Font.PLAIN, 18);  // Fonte dos botões
+        JButton[] buttons = {adicionarItemButton, finalizarVendaButton, voltarButton};
+        for (JButton button : buttons) {
+            button.setBackground(buttonColor);
+            button.setForeground(Color.WHITE);
+            button.setFont(buttonFont);
+            button.setPreferredSize(new Dimension(200, 50));  // Tamanho fixo para todos os botões
+            button.setFocusPainted(false);  // Remover o foco dos botões
+        }
 
         // Adicionar componentes ao painel
-        panel.add(new JLabel("Nome do Produto:"));
-        panel.add(nomeProdutoField);
-        panel.add(buscarProdutoButton);
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Selecione o Produto:"), gbc);
 
-        panel.add(new JLabel("Código do Produto:"));
-        panel.add(codigoProdutoField);
-        panel.add(adicionarItemButton);
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        panel.add(produtoComboBox, gbc);
 
-        panel.add(new JLabel("Quantidade:"));
-        panel.add(quantidadeField);
+        gbc.gridx = 2;
+        gbc.weightx = 0;
+        panel.add(new JLabel("Quantidade:"), gbc);
+
+        gbc.gridx = 3;
+        gbc.weightx = 1.0;
+        panel.add(quantidadeField, gbc);
+
+        gbc.gridx = 4;
+        gbc.weightx = 0;
+        panel.add(adicionarItemButton, gbc);
 
         // Adicionar botões e tabela à janela
-        frame.add(tableScroll, BorderLayout.CENTER);
-        frame.add(panel, BorderLayout.NORTH);
-        frame.add(finalizarVendaButton, BorderLayout.SOUTH);
+        vendaPanel.add(tableScroll, BorderLayout.CENTER);
+        vendaPanel.add(panel, BorderLayout.NORTH);
+        vendaPanel.add(finalizarVendaButton, BorderLayout.SOUTH);
 
         // Ações dos botões
-        buscarProdutoButton.addActionListener(e -> {
-            String nomeProduto = nomeProdutoField.getText();
-            Produto[] produtos = historicoProdutos.pesquisarProdutos(nomeProduto);
-            if (produtos.length > 0) {
-                StringBuilder sb = new StringBuilder("Produtos encontrados:\n");
-                for (Produto p : produtos) {
-                    sb.append("Código: ").append(p.getCodigo()).append(", Nome: ").append(p.getDescricao()).append("\n");
-                }
-                JOptionPane.showMessageDialog(frame, sb.toString());
-            } else {
-                JOptionPane.showMessageDialog(frame, "Nenhum produto encontrado.");
-            }
-        });
-
         adicionarItemButton.addActionListener(e -> {
-            String codigo = codigoProdutoField.getText();
+            Produto produtoSelecionado = (Produto) produtoComboBox.getSelectedItem(); // Pega o produto completo selecionado
             String quantidadeStr = quantidadeField.getText();
 
             try {
                 double quantidade = Double.parseDouble(quantidadeStr);
-                Produto produto = historicoProdutos.getProdutoByCodigo(codigo);
-
-                if (produto != null && quantidade > 0 && quantidade <= produto.getQtdEstoque()) {
-                    produto.setQtdEstoque(produto.getQtdEstoque() - quantidade);
-                    Item item = new Item(produto, quantidade);
+                if (produtoSelecionado != null && quantidade > 0 && quantidade <= produtoSelecionado.getQtdEstoque()) {
+                    produtoSelecionado.setQtdEstoque(produtoSelecionado.getQtdEstoque() - quantidade);
+                    Item item = new Item(produtoSelecionado, quantidade);
                     venda.adicionarItem(item);
 
                     // Atualizar tabela
-                    tableModel.addRow(new Object[]{produto.getCodigo(), produto.getDescricao(), quantidade, produto.getPreco()});
+                    tableModel.addRow(new Object[]{produtoSelecionado.getCodigo(), produtoSelecionado.getDescricao(), quantidade, produtoSelecionado.getPreco(), item.getSubtotal()});
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Quantidade inválida ou produto não encontrado.");
+                    JOptionPane.showMessageDialog(vendaPanel, "Quantidade inválida ou produto não encontrado.");
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Quantidade inválida.");
-            }
-        });
-
-        removerItemButton.addActionListener(e -> {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow >= 0) {
-                String codigo = (String) tableModel.getValueAt(selectedRow, 0);
-                venda.removerItem(Integer.parseInt(codigo));
-                tableModel.removeRow(selectedRow);
-            } else {
-                JOptionPane.showMessageDialog(frame, "Nenhum item selecionado para remoção.");
+                JOptionPane.showMessageDialog(vendaPanel, "Quantidade inválida.");
             }
         });
 
@@ -117,18 +118,20 @@ public class VendaControllerGUI {
             if (!ArraysUtils.isEmpty(venda.getItens())) {
                 historicoVendas.adicionarVenda(venda);
                 String comprovante = VendaView.imprimirVenda(venda);
-                JOptionPane.showMessageDialog(frame, "Venda finalizada!\n" + comprovante);
+                JOptionPane.showMessageDialog(vendaPanel, "Venda finalizada!\n" + comprovante);
 
                 // Limpar a venda
                 venda = new Venda();
                 tableModel.setRowCount(0);
             } else {
-                JOptionPane.showMessageDialog(frame, "Nenhum item na venda.");
+                JOptionPane.showMessageDialog(vendaPanel, "Nenhum item na venda.");
             }
         });
 
-        // Exibir a janela
-        frame.setVisible(true);
-    }
+        voltarButton.addActionListener(e -> cardLayout.show(mainPanel, "Menu"));
 
+        vendaPanel.add(voltarButton, BorderLayout.SOUTH);
+
+        return vendaPanel;
+    }
 }
