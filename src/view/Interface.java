@@ -119,6 +119,10 @@ public class Interface {
         // Painel de venda
         VendaControllerGUI vendasControllerGUI = new VendaControllerGUI(historicoVendas, historicoProdutos);
 
+        //Painel para cadastrar produto
+
+        ProdutoControllerGUI produtoControllerGUI = new ProdutoControllerGUI(historicoProdutos);
+
         // Painel para histórico de vendas
         JPanel historicoVendasPanel = new JPanel(new BorderLayout());
         JTextArea vendasTextArea = new JTextArea();
@@ -134,6 +138,7 @@ public class Interface {
         // Adicionar todos os painéis ao CardLayout
         mainPanel.add(menuPanel, "Menu");
         mainPanel.add(vendasControllerGUI.createVendaPanel(cardLayout, mainPanel), "Venda");
+        mainPanel.add(produtoControllerGUI.createPanelCadastrarProduto(), "CadastrarProduto");
         mainPanel.add(historicoVendasPanel, "HistoricoVendas");
         mainPanel.add(historicoProdutosPanel, "HistoricoProdutos");
 
@@ -143,13 +148,7 @@ public class Interface {
         vendaButton.addActionListener(e -> cardLayout.show(mainPanel, "Venda"));
 
         // Ação para o botão "Cadastrar Produto"
-        cadastrarProdutoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ProdutoControllerGUI.registrarProduto(historicoProdutos);
-            }
-        });
-
+        cadastrarProdutoButton.addActionListener(e -> cardLayout.show(mainPanel, "CadastrarProduto"));
         historicoVendasButton.addActionListener(e -> cardLayout.show(mainPanel, "HistoricoVendas"));
         historicoProdutosButton.addActionListener(e -> cardLayout.show(mainPanel, "HistoricoProdutos"));
         //pedidoButton.addActionListener(e -> ProdutoController.fazerPedido(historicoProdutos));

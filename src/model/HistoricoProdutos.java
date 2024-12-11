@@ -61,7 +61,7 @@ public class HistoricoProdutos {
 
     public boolean salvarProdutos(){
         try {
-            CSVUtils.salvarEmCsv("produtos.csv", "codigo,descricao,preco,qtd_estoque,categoria", this.produtos);
+            CSVUtils.salvarEmCsv("produtos.csv", "descricao,codigo,preco,qtd_estoque,categoria", this.produtos);
             return true;
         } catch (RuntimeException e) {
             System.out.println("Erro ao salvar produtos, tente novamente.");

@@ -8,15 +8,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ProdutoControllerGUI {
+public final class ProdutoControllerGUI {
+    private HistoricoProdutos historicoProdutos;
 
-    public static void registrarProduto(HistoricoProdutos historicoProdutos){
+    public ProdutoControllerGUI(HistoricoProdutos historicoProdutos){
+        this.historicoProdutos = historicoProdutos;
+    }
+
+    public JPanel createPanelCadastrarProduto(){
         // Criar a janela de cadastro de produto
-        JFrame cadastroFrame = new JFrame("Cadastrar Produto");
-        cadastroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Abrir a janela em tela cheia
-        cadastroFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Layout do painel
         JPanel cadastroPanel = new JPanel();
@@ -68,9 +69,6 @@ public class ProdutoControllerGUI {
         cadastroPanel.add(new JLabel()); // Para preencher o grid
         cadastroPanel.add(cadastrarButton);
 
-        // Adicionar painel à janela
-        cadastroFrame.add(cadastroPanel);
-        cadastroFrame.setVisible(true);
 
         // Ação do botão cadastrar
         cadastrarButton.addActionListener(new ActionListener() {
@@ -78,7 +76,7 @@ public class ProdutoControllerGUI {
             public void actionPerformed(ActionEvent e) {
                 String descricao = descricaoField.getText().trim();
                 if (descricao.isEmpty()) {
-                    JOptionPane.showMessageDialog(cadastroFrame, "Descrição inválida!");
+                    JOptionPane.showMessageDialog(cadastroPanel, "Descrição inválida!");
                     return;
                 }
 
@@ -86,7 +84,7 @@ public class ProdutoControllerGUI {
                 try {
                     preco = Double.parseDouble(precoField.getText().trim());
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(cadastroFrame, "Preço inválido!");
+                    JOptionPane.showMessageDialog(cadastroPanel, "Preço inválido!");
                     return;
                 }
 
@@ -94,7 +92,7 @@ public class ProdutoControllerGUI {
                 try {
                     qtdEstoque = Double.parseDouble(qtdEstoqueField.getText().trim());
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(cadastroFrame, "Quantidade inválida!");
+                    JOptionPane.showMessageDialog(cadastroPanel, "Quantidade inválida!");
                     return;
                 }
 
@@ -102,13 +100,15 @@ public class ProdutoControllerGUI {
                 Produto produto = new Produto(gerarCodigo(), descricao, preco, qtdEstoque, categoria);
 
                 historicoProdutos.cadastrarProduto(produto, false);
-                JOptionPane.showMessageDialog(cadastroFrame, "Produto cadastrado com sucesso!");
-                cadastroFrame.dispose();
+                JOptionPane.showMessageDialog(cadastroPanel, "Produto cadastrado com sucesso!");
+
             }
         });
+
+        return cadastroPanel;
     }
 
-    public static String gerarCodigo() {
-        return String.valueOf(System.currentTimeMillis());
+    private static String gerarCodigo() {
+        return ProdutoController.gerarCodigo();
     }
 }

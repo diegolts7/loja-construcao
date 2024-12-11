@@ -1,5 +1,6 @@
 package view;
 
+import controller.ProdutoController;
 import controller.ProdutoControllerGUI;
 import controller.VendaController;
 import model.*;
@@ -30,7 +31,7 @@ public class Main {
             switch (escolha){
                 case 1 : VendaController.registrarVenda(historicoVendas, historicoProdutos); break;
                 case 2 :
-                    ProdutoControllerGUI.registrarProduto(historicoProdutos); break;
+                    ProdutoController.registrarProduto(historicoProdutos); break;
                 case 3 : historicoVendas.imprimirHistoricoVendas(); break;
                 case 4 : ProdutoView.imprimirProdutos(historicoProdutos.getProdutos()); break;
                 //case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
