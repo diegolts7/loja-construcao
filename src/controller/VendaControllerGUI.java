@@ -115,7 +115,7 @@ public class VendaControllerGUI {
         });
 
         finalizarVendaButton.addActionListener(e -> {
-            if (!ArraysUtils.isEmpty(venda.getItens())) {
+            if (!venda.getItens().isEmpty()) {
                 historicoVendas.adicionarVenda(venda);
                 String comprovante = VendaView.imprimirVenda(venda);
                 JOptionPane.showMessageDialog(vendaPanel, "Venda finalizada!\n" + comprovante);

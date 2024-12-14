@@ -7,16 +7,18 @@ import model.Venda;
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
 
 public class VendaView {
     public static String imprimirVenda(Venda venda){
-        Item[] myItens = venda.getItens();
+        Collection<Item> myItens = venda.getItens();
         StringBuilder resumoVenda = new StringBuilder();
 
-        if (!ArraysUtils.isEmpty(myItens)) {
+        if (!myItens.isEmpty()) {
             resumoVenda.append("ITENS DA VENDA\n\n");
-            Arrays.stream(myItens)
-                            .filter(item -> item != null)
+            myItens.stream()
+                    .filter(Objects::nonNull)
                                     .forEach(item -> {
                                         resumoVenda.append(String.format(
                                                 "Código do item: %d\n%s\nQuantidade do produto: %.2f\nSubtotal do item: %.2f R$\n\n",

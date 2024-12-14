@@ -88,7 +88,7 @@ public abstract   class VendaController {
             }
         } while (!parada);
 
-        if (!ArraysUtils.isEmpty(venda.getItens())){
+        if (!venda.getItens().isEmpty()){
             historicoVendas.adicionarVenda(venda);
         }
     }
