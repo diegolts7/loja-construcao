@@ -101,15 +101,15 @@ public class Interface {
         gbc.gridx = 0;
         gbc.gridy = 0;
         buttonPanel.add(vendaButton, gbc);
-        gbc.gridy++;
+        gbc.gridx++;
         buttonPanel.add(cadastrarProdutoButton, gbc);
-        gbc.gridy++;
+        gbc.gridx++;
         buttonPanel.add(historicoVendasButton, gbc);
-        gbc.gridy++;
+        gbc.gridx++;
         buttonPanel.add(historicoProdutosButton, gbc);
-        gbc.gridy++;
+        gbc.gridx++;
         buttonPanel.add(pedidoButton, gbc);
-        gbc.gridy++;
+        gbc.gridx++;
         buttonPanel.add(sairButton, gbc);
 
         // Adicionar a logo e painel central ao menu
