@@ -54,7 +54,7 @@ public class Interface {
         };
 
         // Carregar a logo
-        ImageIcon logoIcon = new ImageIcon("src/img/logo.png"); // Caminho para a logo
+        ImageIcon logoIcon = new ImageIcon("src/img/imagem.png"); // Caminho para a logo
         Image img = logoIcon.getImage();
         Image scaledImg = img.getScaledInstance(230, 130, Image.SCALE_SMOOTH);
         logoIcon = new ImageIcon(scaledImg);
