@@ -1,6 +1,6 @@
 package controller;
 
-import model.Categoria;
+import model.produto.Categoria;
 
 public abstract class IsCategoriaValida {
     public static Categoria test(String categoria){

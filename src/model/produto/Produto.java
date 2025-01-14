@@ -1,20 +1,17 @@
-package model;
+package model.produto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Random;
+import model.service.codigoGenerete.CodigoGenerator;
 
 public class Produto {
     private final String  codigo;
     private String descricao;
     //Visibilidade de pacote (package) ou default
-    double preco;
-    double qtdEstoque;
+    private double preco;
+    private double qtdEstoque;
     private Categoria categoria;
 
-    public Produto(String codigo,String descricao, double preco, double quantidade ,Categoria categoria) {
-        this.codigo = codigo;
+    public Produto(CodigoGenerator adapter, String descricao, double preco, double quantidade , Categoria categoria) {
+        this.codigo = adapter.gerarCodigo();
         this.descricao = descricao;
         this.preco = preco;
         this.qtdEstoque = quantidade < 0 ? 0 : quantidade;
@@ -58,7 +55,7 @@ public class Produto {
     }
 
     public String retornarProduto(){
-        return "Produto: {codigo: " + this.codigo + ", " + "descrição: " + this.descricao + ", " + "preço: " + this.preco + " R$" + ", " + "qtd_estoque: " + this.qtdEstoque + ", " + "categoria: " + this.categoria + "}";
+        return "Produto: {descrição: " + this.descricao + ", " + "codigo: " + this.codigo + ", " + "preço: " + this.preco + " R$" + ", " + "qtd_estoque: " + this.qtdEstoque + ", " + "categoria: " + this.categoria + "}";
     }
 
     @Override

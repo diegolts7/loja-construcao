@@ -1,4 +1,6 @@
-package model;
+package model.fornecedor;
+
+import model.produto.Categoria;
 
 public class Fornecedor {
     private final String cnpj;

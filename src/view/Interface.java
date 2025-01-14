@@ -2,16 +2,16 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import controller.ProdutoControllerGUI;
 import controller.VendaControllerGUI;
-import model.HistoricoProdutos;
-import model.HistoricoVendas;
+import model.produto.HistoricoProdutos;
+import model.service.lerDados.LerDadosCsv;
+import model.service.salvarDados.SalvarDadosCsv;
+import model.venda.HistoricoVendas;
 
 public class Interface {
 
@@ -29,7 +29,7 @@ public class Interface {
 
         // Instâncias dos históricos
         HistoricoVendas historicoVendas = new HistoricoVendas();
-        HistoricoProdutos historicoProdutos = new HistoricoProdutos();
+        HistoricoProdutos historicoProdutos = new HistoricoProdutos(new SalvarDadosCsv(), new LerDadosCsv());
         historicoProdutos.lerProdutos();
 
         // Painel inicial (menu principal)

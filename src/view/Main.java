@@ -1,9 +1,11 @@
 package view;
 
 import controller.ProdutoController;
-import controller.ProdutoControllerGUI;
 import controller.VendaController;
-import model.*;
+import model.produto.HistoricoProdutos;
+import model.service.lerDados.LerDadosCsv;
+import model.service.salvarDados.SalvarDadosCsv;
+import model.venda.HistoricoVendas;
 
 import java.util.Locale;
 import java.util.Scanner;
@@ -18,8 +20,7 @@ public class Main {
         boolean parada = false;
         HistoricoVendas historicoVendas = new HistoricoVendas();
 
-        HistoricoProdutos historicoProdutos = new HistoricoProdutos();
-        historicoProdutos.lerProdutos();
+        HistoricoProdutos historicoProdutos = new HistoricoProdutos(new SalvarDadosCsv(), new LerDadosCsv());
         /*historicoProdutos.cadastrarProduto(new Produto(ProdutoController.gerarCodigo(),"arroz",5.67, 20,Categoria.ALIMENTICIO), false);
         historicoProdutos.cadastrarProduto(new Produto(ProdutoController.gerarCodigo(),"arroz parborizado",5.20, 30,Categoria.ALIMENTICIO), false);
 */
@@ -32,9 +33,9 @@ public class Main {
                 case 1 : VendaController.registrarVenda(historicoVendas, historicoProdutos); break;
                 case 2 :
                     ProdutoController.registrarProduto(historicoProdutos); break;
-                case 3 : historicoVendas.imprimirHistoricoVendas(); break;
+                case 3 : HistoricoVendasView.imprimirVendas(historicoVendas.getHistoricoVendas()); break;
                 case 4 : ProdutoView.imprimirProdutos(historicoProdutos.getProdutos()); break;
-                //case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
+                case 5 : ProdutoController.fazerPedido(historicoProdutos); break;
                 case 0 : parada = true; break;
                 default: continue;
             }

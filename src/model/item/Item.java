@@ -1,18 +1,20 @@
-package model;
+package model.item;
+
+import model.produto.Produto;
+import model.service.codigoGenerete.CodigoGenerator;
 
 public class Item {
-    private static int auxCodigo;
-    private final int codigo;
+    private final String codigo;
     private Produto produto;
     private double quantidade;
 
-    public Item(Produto produto, double quantidade) {
-        this.codigo = auxCodigo++;
+    public Item(CodigoGenerator adapter, Produto produto, double quantidade) {
+        this.codigo = adapter.gerarCodigo();
         this.produto = produto;
         this.quantidade = quantidade;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
@@ -29,11 +31,11 @@ public class Item {
     }
 
     public void setQuantidade(double quantidade) {
-        this.quantidade = quantidade;
+        this.quantidade += quantidade;
     }
 
     public double getSubtotal(){
-        return produto.preco*quantidade;
+        return produto.getPreco() * quantidade;
     }
 
 }

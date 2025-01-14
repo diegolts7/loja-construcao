@@ -3,7 +3,13 @@ package controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import model.*;
+
+import model.item.Item;
+import model.produto.HistoricoProdutos;
+import model.produto.Produto;
+import model.service.codigoGenerete.GenereteWithDateAndRandom;
+import model.venda.HistoricoVendas;
+import model.venda.Venda;
 import view.VendaView;
 
 public class VendaControllerGUI {
@@ -16,7 +22,7 @@ public class VendaControllerGUI {
     public VendaControllerGUI(HistoricoVendas historicoVendas, HistoricoProdutos historicoProdutos) {
         this.historicoVendas = historicoVendas;
         this.historicoProdutos = historicoProdutos;
-        this.venda = new Venda();
+        this.venda = new Venda(new GenereteWithDateAndRandom());
     }
 
     public JPanel createVendaPanel(CardLayout cardLayout, JPanel mainPanel) {
@@ -100,8 +106,8 @@ public class VendaControllerGUI {
             try {
                 double quantidade = Double.parseDouble(quantidadeStr);
                 if (produtoSelecionado != null && quantidade > 0 && quantidade <= produtoSelecionado.getQtdEstoque()) {
-                    produtoSelecionado.setQtdEstoque(produtoSelecionado.getQtdEstoque() - quantidade);
-                    Item item = new Item(produtoSelecionado, quantidade);
+                    produtoSelecionado.setQtdEstoque(-quantidade);
+                    Item item = new Item(new GenereteWithDateAndRandom(),produtoSelecionado, quantidade);
                     venda.adicionarItem(item);
 
                     // Atualizar tabela
@@ -121,7 +127,7 @@ public class VendaControllerGUI {
                 JOptionPane.showMessageDialog(vendaPanel, "Venda finalizada!\n" + comprovante);
 
                 // Limpar a venda
-                venda = new Venda();
+                venda = new Venda(new GenereteWithDateAndRandom());
                 tableModel.setRowCount(0);
             } else {
                 JOptionPane.showMessageDialog(vendaPanel, "Nenhum item na venda.");

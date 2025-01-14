@@ -1,9 +1,11 @@
 package controller;
 
 import javax.swing.*;
-import model.Categoria;
-import model.HistoricoProdutos;
-import model.Produto;
+import model.produto.Categoria;
+import model.produto.HistoricoProdutos;
+import model.produto.Produto;
+import model.service.codigoGenerete.GenereteWithDateAndRandom;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,18 +99,14 @@ public final class ProdutoControllerGUI {
                 }
 
                 Categoria categoria = (Categoria) categoriaComboBox.getSelectedItem();
-                Produto produto = new Produto(gerarCodigo(), descricao, preco, qtdEstoque, categoria);
+                Produto produto = new Produto(new GenereteWithDateAndRandom(), descricao, preco, qtdEstoque, categoria);
 
-                historicoProdutos.cadastrarProduto(produto, false);
+                historicoProdutos.cadastrarProduto(produto);
                 JOptionPane.showMessageDialog(cadastroPanel, "Produto cadastrado com sucesso!");
 
             }
         });
 
         return cadastroPanel;
-    }
-
-    private static String gerarCodigo() {
-        return ProdutoController.gerarCodigo();
     }
 }

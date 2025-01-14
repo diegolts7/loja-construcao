@@ -1,9 +1,6 @@
-package model;
-
-import controller.CSVUtils;
+package model.fornecedor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HistoricoFornecedor {
     private ArrayList<Fornecedor> fornecedores;
